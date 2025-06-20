@@ -28,6 +28,7 @@ SECRET_KEY = 'django-insecure-8ayb%*_rj2@q%dk$p8u+ouvyiuygdxapu@odxp_mp)3!35__#k
 DEBUG = False
 
 ALLOWED_HOSTS = [
+    'cspl.corniya.com',
     'localhost',
     '127.0.0.1',
     '014e-2401-4900-889e-c617-b2a4-ac96-697b-68a7.ngrok-free.app',
