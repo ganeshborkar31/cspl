@@ -36,6 +36,7 @@ ALLOWED_HOSTS = [
 
 CSRF_TRUSTED_ORIGINS = [
     'https://014e-2401-4900-889e-c617-b2a4-ac96-697b-68a7.ngrok-free.app',
+    'cspl.corniya.com',
 ]
 
 # Application definition
