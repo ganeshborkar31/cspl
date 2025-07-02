@@ -1174,3 +1174,31 @@ def upload_products_excel(request):
     return Response(response_data)
 
 
+# In-memory store (replace with DB model in production)
+device_tokens = set()
+
+@api_view(['POST'])
+def register_token(request):
+    token = request.data.get("token")
+    print(token)
+    if token:
+        device_tokens.add(token)
+        return Response({"message": "Token registered"}, status=status.HTTP_201_CREATED)
+    return Response({"error": "Token is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+def send_notification(request):
+    from .utils import send_push_notification
+    success = 0
+
+    for token in device_tokens:
+        
+        try:
+            send_push_notification(token, "Hello!", "You got a test notification 🎉")
+            success += 1
+            
+        except Exception as e:
+            print(f"Error sending to {token}: {e}")
+            
+    return Response({"message": f"Notification sent to {success} devices."}, status=status.HTTP_200_OK)
+

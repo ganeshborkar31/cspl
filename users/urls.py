@@ -2,9 +2,11 @@ from django.urls import path, include
 from rest_framework.authtoken import views
 from rest_framework.routers import DefaultRouter
 
-from .views import (login, get_users, send_mail, register,verify_mail, place_order, make_payment, 
-                    download_products_excel,upload_products_excel, update_user, delete_user, list_groups_with_users, view_orders_paginated, 
-                    CustomUserRoleAPIView, ProductViewSet)
+# from .views import (login, get_users, send_mail, register,verify_mail, place_order, make_payment, 
+#                     download_products_excel,upload_products_excel, update_user, delete_user, list_groups_with_users, view_orders_paginated, 
+#                     CustomUserRoleAPIView, ProductViewSet)
+
+from .views import *
 
 router = DefaultRouter()
 router.register(r'products', ProductViewSet, basename='product')
@@ -27,6 +29,9 @@ urlpatterns = [
     
     path('download-products/', download_products_excel, name='download-products'),
     path('upload-products/', upload_products_excel, name='upload-products'),
+    
+    path('register-token/', register_token),
+    path('send-notification/', send_notification),
     
     path('', include(router.urls)),
 

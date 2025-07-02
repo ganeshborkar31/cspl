@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-8ayb%*_rj2@q%dk$p8u+ouvyiuygdxapu@odxp_mp)3!35__#k
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = [
+ALLOWED_HOSTS = ['*',
     'cspl.corniya.com',
     'localhost',
     '127.0.0.1',
@@ -36,8 +36,13 @@ ALLOWED_HOSTS = [
 
 CSRF_TRUSTED_ORIGINS = [
     'https://014e-2401-4900-889e-c617-b2a4-ac96-697b-68a7.ngrok-free.app',
-    'cspl.corniya.com',
+    'https://cspl.corniya.com',
+    "http://localhost:8080",  # 👈 your frontend origin
+    "http://127.0.0.1:8080"
 ]
+
+# CORS_ORIGIN_ALLOW = True
+# CORS_ALLOW_ALL_ORIGINS = True
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
@@ -51,16 +56,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     
-    
     'channels',
     ## custom apps
     'users',
     # 'users.apps.UsersConfig',
-    
-    ## 
     'rest_framework.authtoken', 
-    
-    
 ]
 
 # AUTH_USER_MODEL = "users.CustomUser"

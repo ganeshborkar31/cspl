@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Firebase Web Push Notification</title>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-messaging-compat.js"></script>
+</head>
+<body>
+  <h2>Firebase Web Push Notification Demo</h2>
+  <button onclick="enableNotifications()">Enable Notifications</button>
+  <button onclick="sendNotification()">Send Notification via Django</button>
+
+  <script>
+    // ✅ Replace with your Firebase project config
+    const firebaseConfig = {
+
+      apiKey: "AIzaSyAK2Nhhc4J2v64kWIhq4_d31pKdzMyHG3k",
+    
+      authDomain: "fire-base-push31.firebaseapp.com",
+    
+      projectId: "fire-base-push31",
+    
+      storageBucket: "fire-base-push31.firebasestorage.app",
+    
+      messagingSenderId: "665743733598",
+    
+      appId: "1:665743733598:web:39b249c8ede858f63c15cf",
+    
+      measurementId: "G-Q7VDKCE7YL"
+    
+    };
+
+    // ✅ Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+
+    const messaging = firebase.messaging();
+
+    // ✅ Register Service Worker and get token
+    async function enableNotifications() {
+      try {
+        const permission = await Notification.requestPermission();
+        if (permission !== "granted") {
+          alert("Notification permission denied");
+          return;
+        }
+
+        const registration = await navigator.serviceWorker.register("firebase-messaging-sw.js");
+
+        const token = await messaging.getToken({
+          vapidKey: "BICq1D-sswAjcnfAlVojiWnIKU8IIqruCMIsbiDvIrmjJN8jOF2nD2kHi9XyY05E8ve77n2mG1-Lfwyx4je61kg",
+          serviceWorkerRegistration: registration
+        });
+
+        console.log("Device Token:", token);
+
+        // ✅ Send token to your Django backend
+        await fetch("http://localhost/user/register-token/", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ token: token })
+        });
+
+        alert("Token registered with Django backend.");
+
+      } catch (err) {
+        console.error("Error enabling notifications:", err);
+        alert("Error: " + err.message);
+      }
+    }
+
+    // ✅ Trigger Django to send notification
+    function sendNotification() {
+      fetch("http://localhost/user/send-notification/", {
+        method: "POST"
+      });
+    }
+
+    // ✅ Handle messages when the page is open
+    messaging.onMessage((payload) => {
+      console.log("Foreground message received:", payload);
+      alert("Notification: " + payload.notification.title + " - " + payload.notification.body);
+    });
+  </script>
+</body>
+</html>
+
+
+
+
