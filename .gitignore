@@ -154,3 +154,5 @@ cython_debug/
 
 ## socket files
 *.sock
+*.sqlite3
+*.gitignore

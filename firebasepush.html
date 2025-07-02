@@ -55,7 +55,7 @@
         console.log("Device Token:", token);
 
         // ✅ Send token to your Django backend
-        await fetch("http://localhost/user/register-token/", {
+        await fetch("https://cspl.corniya.com/user/register-token/", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ token: token })
@@ -71,7 +71,7 @@
 
     // ✅ Trigger Django to send notification
     function sendNotification() {
-      fetch("http://localhost/user/send-notification/", {
+      fetch("https://cspl.corniya.com/user/send-notification/", {
         method: "POST"
       });
     }
