@@ -33,6 +33,8 @@ urlpatterns = [
     path('register-token/', register_token),
     path('send-notification/', send_notification),
     
+    path('delete-expired-users/', delete_expired_users, name='delete_expired_users'),
+    
     path('', include(router.urls)),
 
 ]

@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from django.utils import timezone
 from datetime import timedelta
 from django.core.validators import validate_email
@@ -1202,3 +1202,25 @@ def send_notification(request):
             
     return Response({"message": f"Notification sent to {success} devices."}, status=status.HTTP_200_OK)
 
+
+
+@api_view(['DELETE'])
+@authentication_classes([ExpireTokenAuthentication])
+@permission_classes([IsAdminUser])
+def delete_expired_users(request):
+    current_time = timezone.now()
+    
+    expired_users = CustomUser.objects.filter(expire_Date__lt=current_time)
+    usernames = list(expired_users.values_list('username', flat=True))
+
+    expired_users.delete()
+
+    return Response(
+        {
+            "message": f"{len(usernames)} expired user(s) deleted.",
+            "deleted_usernames": usernames
+        },
+        status=status.HTTP_200_OK
+    )
+    
+    

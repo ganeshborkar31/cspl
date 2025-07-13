@@ -13,18 +13,14 @@ from  django.utils.translation import gettext_lazy as _
 
 class CustomUser(User):
     phone_number = models.CharField(max_length = 15, unique=True, blank = True, null = True)
+    expire_Date = models.DateTimeField(_("Expire date"), default=timezone.now)
     
     def __str__(self):
         return self.username
 
     def clean(self, *args, **kwargs):
-        try:
-            email_exist = CustomUser.objects.get(email=self.email)
-        except CustomUser.DoesNotExist:
-            email_exist = None
-        
-        if email_exist:
-            raise ValidationError({'email':_('Email is Already Exist')})  
+        if CustomUser.objects.filter(email=self.email).exclude(pk=self.pk).exists():
+            raise ValidationError({'email': _('Email is already in use by another user.')})
         
     
     # def save(self, *args, **kwargs):
